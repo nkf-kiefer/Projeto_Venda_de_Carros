@@ -1,0 +1,204 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  /* Modern Form Styling */
+  form {
+    max-width: 800px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background-color: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+  }
+
+  form h1 {
+    font-size: 2.2rem;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    color: #1e3a8a;
+    font-weight: 600;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #e5e7eb;
+  }
+
+  table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 1rem;
+  }
+
+  th, td {
+    padding: 0.5rem;
+    text-align: left;
+    border-bottom: none;
+    vertical-align: top;
+  }
+
+  th {
+    width: 30%;
+    font-weight: 600;
+    color: #4b5563;
+    padding-top: 0.75rem;
+  }
+
+  /* Form Controls */
+  input[type="text"], 
+  input[type="number"], 
+  input[type="email"],
+  input[type="file"],
+  select, 
+  textarea {
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    width: 100%;
+    background-color: #f9fafb;
+    margin-bottom: 0.5rem;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  input[type="text"]:focus, 
+  input[type="number"]:focus, 
+  input[type="email"]:focus,
+  input[type="file"]:focus, 
+  select:focus, 
+  textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    background-color: #ffffff;
+  }
+
+  /* Error Messages */
+  .error-message,
+  .errorlist li {
+    color: #dc2626;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    display: block;
+  }
+
+  ul.errorlist {
+    list-style: none;
+    padding: 0;
+    margin: 0.25rem 0;
+  }
+
+  /* Button Styles */
+  .buttons-container {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    margin-top: 2rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid #e5e7eb;
+  }
+
+  .btn {
+    display: inline-block;
+    font-weight: 500;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+    text-decoration: none !important;
+    border: none;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  .btn-primary {
+    background-color: #2563eb;
+    color: white;
+  }
+
+  .btn-primary:hover {
+    background-color: #1d4ed8;
+  }
+
+  .btn-secondary {
+    background-color: #6b7280;
+    color: white;
+  }
+
+  .btn-secondary:hover {
+    background-color: #4b5563;
+  }
+
+  .btn-danger {
+    background-color: #dc2626;
+    color: white;
+  }
+
+  .btn-danger:hover {
+    background-color: #b91c1c;
+  }
+
+  /* Media Query for Responsive Design */
+  @media (max-width: 768px) {
+    form {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+
+    table {
+      display: block;
+    }
+
+    th, td {
+      display: block;
+      width: 100%;
+    }
+
+    th {
+      padding-bottom: 0.25rem;
+    }
+
+    .buttons-container {
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn {
+      width: 100%;
+      margin: 0;
+    }
+  }
+</style>
+
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  <h1>Editar Carro</h1>
+  
+  {% if form.errors %}
+    <div class="form-errors">
+      {% for field in form %}
+        {% for error in field.errors %}
+          <p class="error-message">{{ field.label }}: {{ error }}</p>
+        {% endfor %}
+      {% endfor %}
+      {% for error in form.non_field_errors %}
+        <p class="error-message">{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+  
+  <table>
+    {{ form.as_table }}
+  </table>
+  
+  <div class="buttons-container">
+    <div>
+      <input type="submit" value="Salvar Alterações" class="btn btn-primary">
+    </div>
+    <div>
+      <a href="{% url 'car_delete' pk=object.pk %}" class="btn btn-danger">Deletar Carro</a>
+      <a href="{% url 'cars_list' %}" class="btn btn-secondary">Cancelar</a>
+    </div>
+  </div>
+</form>
+{% endblock %}

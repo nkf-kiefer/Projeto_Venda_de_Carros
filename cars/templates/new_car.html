@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+   <form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+<table>
+    {{form.as_table}}
+
+</table>
+<input type="submit" value="Cadastrar" class="btn btn_primary">
+<!--Executando e colocando no backend os carros cadastrados-->
+
+
+
+   </form>
+
+
+{% endblock %}

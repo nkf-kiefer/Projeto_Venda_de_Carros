@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}Natália Multimarcas{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      :root {
+        --primary: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary: #f3f4f6;
+        --text: #1f2937;
+        --text-light: #6b7280;
+        --bg-light: #f9fafb;
+        --white: #ffffff;
+        --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      body {
+        font-family: "Inter", sans-serif;
+        background-color: var(--bg-light);
+        color: var(--text);
+        line-height: 1.5;
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+      }
+
+      header {
+        background-color: var(--white);
+        border-bottom: 1px solid #e5e7eb;
+        box-shadow: var(--shadow);
+        position: relative; /* Fixo no fluxo da página */
+        z-index: 100;
+      }
+
+      nav {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+        height: 70px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+
+      .logo {
+        font-weight: 700;
+        font-size: 1.5rem;
+        color: var(--primary);
+        text-decoration: none;
+      }
+
+      nav ul {
+        list-style: none;
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+      }
+
+      nav ul li {
+        position: relative;
+      }
+
+      .user-greeting {
+        font-weight: 500;
+        color: var(--text);
+        margin-right: 0.5rem;
+      }
+
+      nav ul li a {
+        color: var(--text);
+        text-decoration: none;
+        font-size: 0.95rem;
+        font-weight: 500;
+        padding: 0.5rem 0.75rem;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+      }
+
+      nav ul li a:hover {
+        color: var(--primary);
+        background-color: rgba(37, 99, 235, 0.05);
+      }
+
+      nav ul li.active a {
+        color: var(--primary);
+        background-color: rgba(37, 99, 235, 0.1);
+      }
+
+      .btn-primary {
+        background-color: var(--primary);
+        color: var(--white) !important;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+      }
+
+      .btn-primary:hover {
+        background-color: var(--primary-dark) !important;
+        color: var(--white) !important;
+      }
+
+      main {
+        flex: 1;
+        max-width: 1200px;
+        width: 100%;
+        margin: 0 auto;
+        padding: 2rem 1rem;
+      }
+
+      footer {
+        background-color: var(--white);
+        border-top: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        text-align: center;
+        color: var(--text-light);
+        font-size: 0.9rem;
+        margin-top: auto;
+      }
+
+      /* Responsive */
+      @media (max-width: 768px) {
+        nav {
+          flex-direction: column;
+          height: auto;
+          padding: 1rem;
+        }
+
+        nav ul {
+          flex-direction: column;
+          width: 100%;
+          gap: 0.5rem;
+        }
+
+        nav ul li {
+          width: 100%;
+        }
+
+        nav ul li a {
+          display: block;
+          padding: 0.75rem;
+          text-align: center;
+        }
+
+        .user-greeting {
+          margin: 0.5rem 0;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <a href="{% url 'cars_list' %}" class="logo">Natália Multimarcas</a>
+        <ul>
+          {% if user.is_authenticated %}
+          <li><span class="user-greeting">Olá, {{ user.username }}</span></li>
+          <li>
+            <a href="{% url 'new_car' %}" class="btn-primary"
+              >Cadastrar Carros</a
+            >
+          </li>
+          {% endif %}
+
+          <li><a href="{% url 'cars_list' %}">Carros</a></li>
+
+          {% if not user.is_authenticated %}
+          <li><a href="{% url 'register' %}">Cadastre-se</a></li>
+          <li><a href="{% url 'login' %}" class="btn-primary">Login</a></li>
+          {% endif %} {% if user.is_authenticated %}
+          <li><a href="{% url 'logout' %}">Sair</a></li>
+          {% endif %}
+        </ul>
+      </nav>
+    </header>
+
+    <main>{% block content %} {% endblock %}</main>
+
+    <footer>
+      <p>&copy; 2025 Natália Multimarcas - Todos os direitos reservados</p>
+    </footer>
+  </body>
+</html>

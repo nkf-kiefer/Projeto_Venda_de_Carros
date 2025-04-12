@@ -1,0 +1,198 @@
+{% extends "base.html" %}
+
+{% block content %}
+<style>
+  /* Search Form */
+  .search-container {
+    background-color: #f3f4f6;
+    padding: 2rem;
+    border-radius: 12px;
+    max-width: 1200px;
+    margin: 2rem auto 1.5rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  }
+
+  form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    max-width: 600px;
+    margin: 0 auto;
+    gap: 0.75rem;
+  }
+
+  input[type="text"] {
+    flex: 1;
+    padding: 0.75rem 1rem;
+    font-size: 1rem;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    background-color: white;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+  }
+
+  input[type="text"]:focus {
+    outline: none;
+    border-color: #2563eb;
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  }
+
+  button[type="submit"] {
+    background-color: #2563eb;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+    font-weight: 500;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  }
+
+  button[type="submit"]:hover {
+    background-color: #1d4ed8;
+  }
+
+  /* Car Grid */
+  .car-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2rem;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 0 1rem 3rem;
+  }
+
+  .car-card {
+    background-color: #ffffff;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+    border-radius: 12px;
+    overflow: hidden;
+    text-align: center;
+    transition: all 0.3s ease;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .car-card:hover {
+    cursor: pointer;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-5px);
+  }
+
+  .car-card img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+    border-bottom: 1px solid #f0f0f0;
+  }
+
+  .car-info {
+    padding: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+  }
+
+  .car-card h2 {
+    font-size: 1.25rem;
+    margin: 0 0 0.75rem 0;
+    color: #1e3a8a;
+    font-weight: 600;
+  }
+
+  .car-card p {
+    font-size: 1rem;
+    color: #4b5563;
+    margin: 0;
+    margin-top: auto;
+  }
+
+  .no-results {
+    grid-column: span 3;
+    text-align: center;
+    padding: 3rem;
+    color: #4b5563;
+    font-size: 1.2rem;
+    background-color: #f9fafb;
+    border-radius: 12px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+  }
+
+  /* Card Link */
+  a.car-link {
+    text-decoration: none;
+    color: inherit;
+    display: block;
+    height: 100%;
+  }
+
+  /* Responsive Design */
+  @media (max-width: 1024px) {
+    .car-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (max-width: 640px) {
+    .car-grid {
+      grid-template-columns: 1fr;
+      gap: 1.5rem;
+    }
+    
+    form {
+      flex-direction: column;
+      width: 100%;
+    }
+    
+    input[type="text"] {
+      width: 100%;
+    }
+    
+    button[type="submit"] {
+      width: 100%;
+    }
+    
+    .search-container {
+      margin: 1rem;
+      padding: 1.5rem 1rem;
+    }
+    
+    .no-results {
+      grid-column: span 1;
+    }
+  }
+</style>
+
+<div class="search-container">
+  <form method="GET" action="{% url 'cars_list' %}">
+    <input type="text" name="search" placeholder="Buscar carro...">
+    <button type="submit">Buscar</button>
+  </form>
+</div>
+
+<div class="car-grid">
+  {% if cars %}
+    {% for car in cars %}
+      <a href="{% url 'car_detail' car.pk %}" class="car-link">
+        <div class="car-card">
+          {% if car.photo %}
+            <img src="{{ car.photo.url }}" alt="{{ car.model }} - {{ car.brand }}">
+          {% else %}
+            <p class="no-photo">Foto não disponível!</p>
+          {% endif %}
+          <div class="car-info">
+            <h2>{{ car.brand }} {{ car.model }}</h2>
+            <p>{{ car.factory_year }} - R$ {{ car.value }}</p>
+          </div>
+        </div>
+      </a>
+    {% endfor %}
+  {% else %}
+    <p class="no-results">Nenhum carro encontrado.</p>
+  {% endif %}
+</div>
+{% endblock %}
